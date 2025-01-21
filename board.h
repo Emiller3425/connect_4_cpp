@@ -18,4 +18,20 @@ struct Board {
 
 Board startingBoard(Board *);
 
+void printBoard(Board *);
+
+bool checkIfBoardIsFull(Board *);
+
+Board playerTurn(Board *);
+
+std::string toArrayHorizontal(Board*);
+
+std::string toArrayVertical(Board*);
+
+std::string toArrayDiag(Board*);
+
+std::string flipBoard(Board*);
+
+int xInARow(int, int, std::string, Board*);
+
 #endif

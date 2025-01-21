@@ -6,6 +6,8 @@
 
 using namespace std;
 
+
+/* TODO - make sure that requested column sizes are valid integers*/ 
 int main(int argc, char* argv[]) {
     /// Define Board struct and inital variables
     struct Board board;
@@ -20,14 +22,19 @@ int main(int argc, char* argv[]) {
     cin >> board.ncols;
     cout << "Rows: " << board.nrows << "\n" << "Columns : " << board.ncols << "\n";
 
-    for (int i = 0; i < board.nrows; i++) {
-        for (int ii = 0; ii < board.ncols; ii++) {
-            cout << ". ";
-        }
-        cout << "\n";
-    }
-
     board = startingBoard(&board);
+
+   // printBoard(&board);
+
+   bool fullBoard = false;
+
+   while(fullBoard == false) {
+
+   board = playerTurn(&board);
+
+   fullBoard = checkIfBoardIsFull(&board);
+
+   }
 
     return 0;
 }
