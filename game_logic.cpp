@@ -141,11 +141,14 @@ Board playerTurn(Board &board) {
         cout << "Looks like that column is full\n";
         playerTurn = '\0';
     }
+    return board;
 }
 
 std::string toArrayHorizontal(const Board &board) {
     string horizontals = "";
+    // loop through rows
     for (int i = 0; i < board.nrows; i++) {
+        // loop through columns
         for (int ii = 0; ii < board.ncols; ii++) {
             int index = i * board.ncols + ii;
             horizontals += (board.grid[index]);
@@ -158,7 +161,9 @@ std::string toArrayHorizontal(const Board &board) {
 
 std::string toArrayVertical(const Board &board) {
     string verticals = "";
+    // loops thorough columns
     for (int i = 0; i < board.nrows; i++) {
+        // loop through rows
         for (int ii = 0; ii < board.ncols; ii++) {
             int index = ii * board.ncols + i;
             verticals += (board.grid[index]);
@@ -187,11 +192,42 @@ std::string toArrayDiagonal(const Board &board) {
         }
         diagonals += 'x';
     }
-
     return diagonals;
 }
 
 // May have to change the return type for this
-std::string flipBoard(const Board &board) {
-    return "p";
+Board flipGrid(const Board &board) {
+    Board flippedBoard = board;
+    string flippedGrid = "";
+
+    for (int i = 0; i < board.nrows; i++) {
+        for (int ii = board.ncols-1; ii >= 0; ii--) {
+            int index = (i * board.ncols + ii);
+            flippedGrid += (board.grid[index]);
+        }
+    }
+    flippedBoard.grid = flippedGrid;
+    return flippedBoard;
+}
+
+char checkWin(const std::string tokens) {
+    int consecutive = 0;
+    char currentToken = '\0';
+    char playerChecking = '\0';
+    for (int i = 0; i < tokens.length(); i++){
+        currentToken = tokens[i];
+        if (currentToken == 'x' || currentToken == '.') {
+            consecutive = 0;
+            playerChecking = '\0';
+        } else if (currentToken == playerChecking) {
+            consecutive++;
+        } else {
+            playerChecking = currentToken;
+            consecutive = 1;
+        }
+        if (consecutive >= 4) {
+            return playerChecking;
+        }
+    }
+    return '\0';
 }

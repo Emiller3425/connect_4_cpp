@@ -18,11 +18,11 @@ struct Board {
 
 Board startingBoard(Board &);
 
+Board playerTurn(Board &);
+
 void printBoard(const Board &board);
 
 bool checkIfBoardIsFull(const Board &board);
-
-Board playerTurn(Board &);
 
 std::string toArrayHorizontal(const Board &board);
 
@@ -30,8 +30,8 @@ std::string toArrayVertical(const Board &board);
 
 std::string toArrayDiagonal(const Board &board);
 
-std::string flipBoard(const Board &board);
+Board flipGrid(const Board &board);
 
-int xInARow(int, int, std::string, const Board &board);
+char checkWin(const std::string);
 
 #endif

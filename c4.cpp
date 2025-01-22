@@ -42,21 +42,55 @@ int main(int argc, char* argv[]) {
     }
     }
 
-    board = startingBoard(board);
-    bool fullBoard = false;
 
-    while(fullBoard == false) {
-    // Update board with playerTurn
-    board = playerTurn(board);
-    // Get horizontals
-    toArrayHorizontal(board);
-    // Get verticals
-    toArrayVertical(board);
-    // Get diagonals
-    toArrayDiagonal(board);
-    // Check if board is full
-    fullBoard = checkIfBoardIsFull(board);
+    // Initialize the starting board
+    startingBoard(board);
 
+        while(true) {
+        // Update board with playerTurn
+        playerTurn(board);
+        // Get horizontals
+        toArrayHorizontal(board);
+        // Get verticals
+        toArrayVertical(board);
+        // Get diagonals
+        toArrayDiagonal(board);
+        // flip grid to process other diagonals
+        flipGrid(board);
+        // Check if board is full
+        if (checkIfBoardIsFull(board) == true) {
+            cout << "It's a tie!";
+            break;
+        }
+
+        // Check wins
+        char horizontalCheck = checkWin(toArrayHorizontal(board));
+
+        if (horizontalCheck != '\0') {
+            cout << "Congrats Player " << horizontalCheck << ", you win!\n";
+            break;
+        }
+
+        char verticalCheck = checkWin(toArrayVertical(board));
+
+        if (verticalCheck != '\0') {
+            cout << "Congrats Player " << verticalCheck << ", you win!\n";
+            break;
+        }
+
+        char diagonalRightCheck = checkWin(toArrayDiagonal(board));
+
+        if (diagonalRightCheck != '\0') {
+            cout << "Congrats Player " << diagonalRightCheck << ", you win!\n";
+            break;
+        }
+
+        char diagonalLeftCheck = checkWin(toArrayDiagonal(flipGrid(board)));
+
+        if (diagonalLeftCheck != '\0') {
+            cout << "Congrats Player " << diagonalLeftCheck << ", you win!\n";
+            break;
+        }
     }
 
     return 0;
