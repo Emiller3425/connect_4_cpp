@@ -43,18 +43,21 @@ int main(int argc, char* argv[]) {
     }
 
     board = startingBoard(board);
+    bool fullBoard = false;
 
-   // printBoard(&board);
+    while(fullBoard == false) {
+    // Update board with playerTurn
+    board = playerTurn(board);
+    // Get horizontals
+    toArrayHorizontal(board);
+    // Get verticals
+    toArrayVertical(board);
+    // Get diagonals
+    toArrayDiagonal(board);
+    // Check if board is full
+    fullBoard = checkIfBoardIsFull(board);
 
-   bool fullBoard = false;
-
-   while(fullBoard == false) {
-
-   board = playerTurn(board);
-
-   fullBoard = checkIfBoardIsFull(board);
-
-   }
+    }
 
     return 0;
 }

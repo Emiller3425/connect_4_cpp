@@ -24,14 +24,14 @@ bool checkIfBoardIsFull(const Board &board);
 
 Board playerTurn(Board &);
 
-std::string toArrayHorizontal(Board*);
+std::string toArrayHorizontal(const Board &board);
 
-std::string toArrayVertical(Board*);
+std::string toArrayVertical(const Board &board);
 
-std::string toArrayDiag(Board*);
+std::string toArrayDiagonal(const Board &board);
 
-std::string flipBoard(Board*);
+std::string flipBoard(const Board &board);
 
-int xInARow(int, int, std::string, Board*);
+int xInARow(int, int, std::string, const Board &board);
 
 #endif

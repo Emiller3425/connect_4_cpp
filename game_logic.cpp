@@ -143,19 +143,55 @@ Board playerTurn(Board &board) {
     }
 }
 
-std::string toArrayHorizontal(Board *board) {
-    return "p";
+std::string toArrayHorizontal(const Board &board) {
+    string horizontals = "";
+    for (int i = 0; i < board.nrows; i++) {
+        for (int ii = 0; ii < board.ncols; ii++) {
+            int index = i * board.ncols + ii;
+            horizontals += (board.grid[index]);
+        }
+        horizontals += 'x';
+    }
+    //cout << horizontals;
+    return horizontals;
 }
 
-std::string toArrayVertical(Board* *board) {
-    return "p";
+std::string toArrayVertical(const Board &board) {
+    string verticals = "";
+    for (int i = 0; i < board.nrows; i++) {
+        for (int ii = 0; ii < board.ncols; ii++) {
+            int index = ii * board.ncols + i;
+            verticals += (board.grid[index]);
+        }
+        verticals += 'x';
+    }
+    return verticals;
 }
 
-std::string toArrayDiag(Board* *board) {
-    return "p";
+std::string toArrayDiagonal(const Board &board) {
+    string diagonals = "";
+
+    // bottom right to top
+    for (int i = board.nrows; i >= 0; i--) {
+        for (int ii = 0; ii < board.nrows - i; ii++) {
+            int index = (i * board.ncols + ii * board.ncols) + ii;
+            diagonals += (board.grid[index]);
+        }
+        diagonals += 'x';
+    }
+    // top right to bottom right
+    for (int i = board.ncols - 1; i > 0; i--) {
+        for (int ii = 0; ii < board.ncols - i; ii++) {
+            int index = i + ((board.ncols + 1) * ii);
+            diagonals += (board.grid[index]);
+        }
+        diagonals += 'x';
+    }
+
+    return diagonals;
 }
 
 // May have to change the return type for this
-std::string flipBoard(Board* *board) {
+std::string flipBoard(const Board &board) {
     return "p";
 }
