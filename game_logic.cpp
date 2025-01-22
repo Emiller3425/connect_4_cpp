@@ -7,23 +7,23 @@
 using namespace std;
 
 // Populates and prints out the starting board.
-Board startingBoard(Board *board) {
+Board startingBoard(Board &board) {
     // Initialize the grid with '.' for all cells
-    board->grid = string(board->nrows * board->ncols, '.');
+    board.grid = string(board.nrows * board.ncols, '.');
 
     // Print column titles
     cout << "Initial Board:\n";
-    for (int i = 0; i < board->ncols; i++) {
+    for (int i = 0; i < board.ncols; i++) {
         cout << static_cast<char>(i + 65) << " ";
     }
     cout << "\n";
 
     // Print starting populated board
-    for (int i = 0; i < board->nrows; i++){
-        for (int ii = 0; ii < board->ncols; ii++) {
-            int index = i * board->ncols + ii;
-            if (index < board->grid.size()) {
-            cout << board->grid[index] << " ";
+    for (int i = 0; i < board.nrows; i++){
+        for (int ii = 0; ii < board.ncols; ii++) {
+            int index = i * board.ncols + ii;
+            if (index < board.grid.size()) {
+            cout << board.grid[index] << " ";
             }
             else {
                 cout << "Past Index Of Array";
@@ -32,22 +32,22 @@ Board startingBoard(Board *board) {
         cout << "\n";
     }
     // Return Initial Blank Board
-    return *board;
+    return board;
 }
 
 // Prints the current board
-void printBoard(Board *board) {
+void printBoard(const Board &board) {
     // print column names
-    for (int i = 0; i < board->ncols; i++) {
+    for (int i = 0; i < board.ncols; i++) {
         cout << static_cast<char>(i + 65) << " ";
     }
     cout << "\n";
     // print each location on the board
-    for (int i = 0; i < board->nrows; i++){
-        for (int ii = 0; ii < board->ncols; ii++) {
-            int index = i * board->ncols + ii;
-            if (index < board->grid.size()) {
-            cout << board->grid[index] << " ";
+    for (int i = 0; i < board.nrows; i++){
+        for (int ii = 0; ii < board.ncols; ii++) {
+            int index = i * board.ncols + ii;
+            if (index < board.grid.size()) {
+            cout << board.grid[index] << " ";
             }
             else {
                 cout << "What the Fuck";
@@ -59,11 +59,11 @@ void printBoard(Board *board) {
 }
 
 // Cheks if the board is full, else its a tie
-bool checkIfBoardIsFull(Board *board) {
-    for (int i = 0; i < board->nrows; i++) {
-        for (int ii = 0; ii < board->ncols; ii++) {
-            int index = i * board->ncols + ii;
-            if (board->grid[index] == '.') {
+bool checkIfBoardIsFull(const Board &board) {
+    for (int i = 0; i < board.nrows; i++) {
+        for (int ii = 0; ii < board.ncols; ii++) {
+            int index = i * board.ncols + ii;
+            if (board.grid[index] == '.') {
                 return false;
             }
         }
@@ -73,7 +73,7 @@ bool checkIfBoardIsFull(Board *board) {
 }
 
 /* TODO - block players from placing in columns outside of valid ones*/
-Board playerTurn(Board *board) {
+Board playerTurn(Board &board) {
 
     // Variables for column input
     char playerTurn = '\0';
@@ -82,28 +82,62 @@ Board playerTurn(Board *board) {
 
     // Collect column input and get index to place
     while(!chipPlaced) {
-        if (playerTurn == '\0') {
-            cout << "Player " << board->pturn << " what column would you like?";  
-        }
-        cin >> playerTurn;
-        for (int i = 0; i < board->nrows; i++) {
-            columnNumber = static_cast<int>(playerTurn - 65);
-            int index = (((board->ncols) * (board->nrows - 1)) + columnNumber) - (i * board->ncols);
-                if(board->grid[index] != '.') {
-                    // Do Nothing
-                    ;
-                } else if (index > board->grid.length()){
-                    cout << "Column Full";
-                    return *board;
+        // Loop until we get a valid input for a column
+        while(true) {
+            if (playerTurn == '\0') {
+                cout << "Player " << board.pturn << " what column would you like?";  
+            }
+            // Collect column
+            cin >> playerTurn;
+            // If input is a capital letter
+            if (static_cast<int>(playerTurn) >= 65 && static_cast<int>(playerTurn) <= 90) {
+                // check that it's a valid column
+                if (static_cast<int>(playerTurn - 65) < board.ncols) {
+                    break;
                 } else {
+                    cout << "Sorry I didn't get that, please enter a valid column\n";
+                    std::cin.clear();
+                    std::cin.ignore(1000, '\n');
+                    playerTurn = '\0';
+                }
+            // If input is a lowercase letter
+            } else if (static_cast<int>(playerTurn) >= 97 && static_cast<int>(playerTurn) <= 122) {
+                playerTurn -= 32;
+                // check that it's a valid column
+                if (static_cast<int>(playerTurn - 65) < board.ncols) {
+                    break;
+                } else {
+                    cout << "Sorry I didn't get that, please enter a valid column\n";
+                    std::cin.clear();
+                    std::cin.ignore(1000, '\n');
+                    playerTurn = '\0';
+                }
+            // Otherwise the input is invalid
+            } else {
+                cout << "Sorry I didn't get that, please enter a valid column\n";
+                std::cin.clear();
+                std::cin.ignore(1000, '\n');
+                playerTurn = '\0';
+            }
+        }
+
+        // Handle token stacking
+        for (int i = 0; i < board.nrows; i++) {
+            // Grab column index
+            columnNumber = static_cast<int>(playerTurn - 65);
+            // Figure out grid index based on the row we are checking
+            int index = (((board.ncols) * (board.nrows - 1)) + columnNumber) - (i * board.ncols);
+                // there is already a token in this row for the selecetd column
+                if(board.grid[index] == '.') {
                     // Place chip and update board
-                    board->grid[index] = char(board->pturn + 48);
+                    board.grid[index] = char(board.pturn + 48);
                     chipPlaced = true;
                     printBoard(board);
-                    board->pturn = board->pturn % 2 + 1;
-                    return *board;
-                    }
+                    board.pturn = board.pturn % 2 + 1;
+                    return board;
+                } 
         }
+        // Column is full
         cout << "Looks like that column is full\n";
         playerTurn = '\0';
     }

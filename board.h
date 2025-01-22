@@ -16,13 +16,13 @@ struct Board {
 
 };
 
-Board startingBoard(Board *);
+Board startingBoard(Board &);
 
-void printBoard(Board *);
+void printBoard(const Board &board);
 
-bool checkIfBoardIsFull(Board *);
+bool checkIfBoardIsFull(const Board &board);
 
-Board playerTurn(Board *);
+Board playerTurn(Board &);
 
 std::string toArrayHorizontal(Board*);
 

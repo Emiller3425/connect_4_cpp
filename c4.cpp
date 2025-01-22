@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <limits>
 #include "board.h"
 
 using namespace std;
@@ -16,13 +17,32 @@ int main(int argc, char* argv[]) {
     board.checkFull = 0;
     board.numToWin = 4;
 
-    cout << "How many rows would you like?\n";
+    while (true) {
+    cout << "How many rows would you like? (4-9)\n";
     cin >> board.nrows;
-    cout << "How many columns would you like?\n";
+    if (std::cin.fail() || board.nrows < 4 || board.nrows > 9) {
+        cout << "Sorry I didn't get that, please enter a valid amount of row\n";
+        std::cin.clear();
+        std::cin.ignore(1000, '\n');
+        board.nrows = 0;
+    } else {
+        break;
+    }
+    }
+     while (true) {
+    cout << "How many columns would you like? (4-9)\n";
     cin >> board.ncols;
-    cout << "Rows: " << board.nrows << "\n" << "Columns : " << board.ncols << "\n";
+    if (std::cin.fail() || board.ncols < 4 || board.ncols > 9) {
+        cout << "Sorry I didn't get that, please enter a valid amount of columns (4-9)\n";
+        std::cin.clear();
+        std::cin.ignore(1000, '\n');
+        board.nrows = 0;
+    } else {
+        break;
+    }
+    }
 
-    board = startingBoard(&board);
+    board = startingBoard(board);
 
    // printBoard(&board);
 
@@ -30,9 +50,9 @@ int main(int argc, char* argv[]) {
 
    while(fullBoard == false) {
 
-   board = playerTurn(&board);
+   board = playerTurn(board);
 
-   fullBoard = checkIfBoardIsFull(&board);
+   fullBoard = checkIfBoardIsFull(board);
 
    }
 
