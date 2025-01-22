@@ -49,9 +49,6 @@ void printBoard(const Board &board) {
             if (index < board.grid.size()) {
             cout << board.grid[index] << " ";
             }
-            else {
-                cout << "What the Fuck";
-            }
         }
         cout << "\n";
     }
@@ -155,7 +152,6 @@ std::string toArrayHorizontal(const Board &board) {
         }
         horizontals += 'x';
     }
-    //cout << horizontals;
     return horizontals;
 }
 
@@ -195,7 +191,7 @@ std::string toArrayDiagonal(const Board &board) {
     return diagonals;
 }
 
-// May have to change the return type for this
+//flips the board across the horizontal pllane to grab the other diagonals
 Board flipGrid(const Board &board) {
     Board flippedBoard = board;
     string flippedGrid = "";
@@ -210,24 +206,33 @@ Board flipGrid(const Board &board) {
     return flippedBoard;
 }
 
+// Checks if there is a winner
 char checkWin(const std::string tokens) {
+    // how many in a row for the player we are checking
     int consecutive = 0;
+    // current token in the board we are looking at
     char currentToken = '\0';
+    // What player we are evauluating consecutives for
     char playerChecking = '\0';
     for (int i = 0; i < tokens.length(); i++){
         currentToken = tokens[i];
+        // If there's not a player token or if the row/column/diagonal has been looked through
         if (currentToken == 'x' || currentToken == '.') {
             consecutive = 0;
             playerChecking = '\0';
+        // If theres a consecutive
         } else if (currentToken == playerChecking) {
             consecutive++;
+        // A different player's token
         } else {
             playerChecking = currentToken;
             consecutive = 1;
         }
+        // 4 in a row means you win 
         if (consecutive >= 4) {
             return playerChecking;
         }
     }
+    // return \0 if theres currently not a winner
     return '\0';
 }
